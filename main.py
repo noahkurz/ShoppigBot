@@ -30,7 +30,7 @@ class supremeBot(object):
             )
         )
         self.b.find_by_xpath("//*[@id='fld-e']").fill("noahkurz19@gmail.com")
-        self.b.find_by_xpath("//*[@id='fld-p1']").fill("Meatbagel1!")
+        self.b.find_by_xpath("//*[@id='fld-p1']").fill("Sabers7168!")
         self.b.find_by_xpath("/html/body/div[1]/div/section/main/div[1]/div/div/div/div/form/div[4]/button").click()
     
     def visitSite(self):
@@ -95,6 +95,8 @@ if __name__ == "__main__":
     #if not found_product:
     #    raise Exception("Couldn't find product. Sry bruhhhh")
     BOT.initializeBrowser()
+
     BOT.login()
-   # BOT.visitSite()
+    timeout = 15
+    BOT.visitSite()
     #BOT.checkoutFunc()
