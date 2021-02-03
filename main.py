@@ -7,6 +7,7 @@ import helpers
 class supremeBot(object):
     def __init__(self, **info):
         self.base_url = 'https://www.bestbuy.com/site/sony-playstation-5-dualsense-wireless-controller/6430163.p?skuId=6430163'
+        self.login_url = 'https://www.bestbuy.com/identity/global/signin'
         #self.product = 'site/sony-playstation-5-console/6426149.p?skuId=6426149'
         #self.checkout = '/checkout'
         self.info = info
@@ -21,36 +22,25 @@ class supremeBot(object):
             self.b = Browser('chrome', **executable_path)
 #So this is to find multiple products(in my case, so lets skip this for now)
 #TO DO...
-    def findProduct(self):
-        try:
-            r = requests.get(
-                "{}{}{}".format(
-                    self.base_url,
-                    self.product)).text
-            soup = bs.BeautifulSoup(r, 'lxml')
 
-            temp_tuple = []
-            temp_link = []
-
-            for link in soup.find_all('a', href=True):
-                temp_tuple.append((link['href'], link.text))
-            for i in temp_tuple:
-                if i[1] == self.info['product'] or i[1] == self.info['color']:
-                    temp_link.append(i[0])
-
-            self.final_link = list(
-                set([x for x in temp_link if temp_link.count(x) == 2]))[0]
-            return True
-        except:
-            return False
-
+    def login(self):
+        self.b.visit(
+            "{}".format(
+                self.login_url
+            )
+        )
+        self.b.find_by_xpath("//*[@id='fld-e']").fill("noahkurz19@gmail.com")
+        self.b.find_by_xpath("//*[@id='fld-p1']").fill("Meatbagel1!")
+        self.b.find_by_xpath("/html/body/div[1]/div/section/main/div[1]/div/div/div/div/form/div[4]/button").click()
+    
     def visitSite(self):
         self.b.visit(
             "{}".format(
                 self.base_url))
-        self.b.find_by_xpath("/html/body/div[3]/main/div[2]/div[3]/div[2]/div/div/div[7][1]").click()
-        self.b.find_by_xpath("/html/body/div[3]/main/div[2]/div[3]/div[2]/div/div/div[7][1]").click()
-        self.b.find_by_xpath("/html/body/div[3]/main/div[2]/div[3]/div[2]/div/div/div[7][1]").click()
+        #//TO-DO find a more permanent solution to adding button to cart
+        self.b.find_by_xpath("/html/body/div[3]/main/div[2]/div[3]/div[2]/div/div/div[8][1]").click()
+        self.b.find_by_xpath("/html/body/div[3]/main/div[2]/div[3]/div[2]/div/div/div[8][1]").click()
+        self.b.find_by_xpath("/html/body/div[3]/main/div[2]/div[3]/div[2]/div/div/div[8][1]").click()
     def checkoutFunc(self):
 
         self.b.visit("{}{}".format(self.base_url, self.checkout))
@@ -105,5 +95,6 @@ if __name__ == "__main__":
     #if not found_product:
     #    raise Exception("Couldn't find product. Sry bruhhhh")
     BOT.initializeBrowser()
-    BOT.visitSite()
+    BOT.login()
+   # BOT.visitSite()
     #BOT.checkoutFunc()
