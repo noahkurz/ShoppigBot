@@ -7,7 +7,7 @@ import time
 #build the URL to attack... 
 class shoppingBot(object):
     def __init__(self, **info):
-        self.base_url = 'https://www.bestbuy.com/site/sony-playstation-5-dualsense-wireless-controller/6430163.p?skuId=6430163'
+        self.product_url = 'https://www.bestbuy.com/site/sony-playstation-5-dualsense-wireless-controller/6430163.p?skuId=6430163'
         self.login_url = 'https://www.bestbuy.com/identity/global/signin'
         self.checkout_url = 'https://www.bestbuy.com/checkout/r/fulfillment'
         self.info = info
@@ -26,14 +26,14 @@ class shoppingBot(object):
                 self.login_url
             )
         )
-        self.b.find_by_xpath("//*[@id='fld-e']").fill("")#enter ypur emai;
-        self.b.find_by_xpath("//*[@id='fld-p1']").fill("")#enter your best buy password associated with the email.
+        self.b.find_by_xpath("//*[@id='fld-e']").fill("noahkurz19@gmail.com")#enter ypur emai;
+        self.b.find_by_xpath("//*[@id='fld-p1']").fill("Sabers7168!")#enter your best buy password associated with the email.
         self.b.find_by_xpath("/html/body/div[1]/div/section/main/div[1]/div/div/div/div/form/div[4]/button").click()
     
     def allocateProduct(self):
         self.b.visit(
             "{}".format(
-                self.base_url))
+                self.product_url))
         #//TO-DO find a more permanent solution to adding button to cart
         try:
             self.b.find_by_xpath("/html/body/div[3]/main/div[2]/div[3]/div[2]/div/div/div[8][1]").click()
@@ -41,9 +41,8 @@ class shoppingBot(object):
             self.b.find_by_xpath("/html/body/div[3]/main/div[2]/div[3]/div[2]/div/div/div[8][1]").click()   
         except:
             time.sleep(4)
-            self.b.find_by_xpath("/html/body/div[3]/main/div[2]/div[3]/div[2]/div/div/div[8][1]").click()
-            self.b.find_by_xpath("/html/body/div[3]/main/div[2]/div[3]/div[2]/div/div/div[8][1]").click()
-            self.b.find_by_xpath("/html/body/div[3]/main/div[2]/div[3]/div[2]/div/div/div[8][1]").click()
+            self.allocateProduct()
+        return True
     
     def checkout(self):
         self.b.visit("{}".format(self.checkout_url))
@@ -51,16 +50,15 @@ class shoppingBot(object):
         self.b.find_by_xpath("/html/body/div[1]/div[2]/div/div[2]/div[1]/div[1]/main/div[2]/div[2]/form/section/div/div[2]/div/div/button/span").click()
 
     def submitPayment(self):
-        CCVCode = ""
         try:
-            self.b.find_by_xpath("//*[@id='credit-card-cvv']").fill(CCVCode)#enter the CCV code associated with your best buy account
+            self.b.find_by_xpath("//*[@id='credit-card-cvv']").fill("137")#enter the CCV code associated with your best buy account
         except:
             time.sleep(2)
-            self.b.find_by_xpath("//*[@id='credit-card-cvv']").fill(CCVCode)#enter the CCV code associated with your best buy account
+            self.b.find_by_xpath("//*[@id='credit-card-cvv']").fill("137")#enter the CCV code associated with your best buy account
         print("we made it to the end!")
         #self.b.find_by_xpath("/html/body/div[1]/div[2]/div/div[2]/div[1]/div[1]/main/div[2]/div[3]/div/section/div[4]/button").click()
-        
-        
+
+
 
         
 
@@ -76,7 +74,15 @@ if __name__ == "__main__":
     print("Bot is now starting the process of securing a ps5...\n")
     BOT.login()
     print("Bot is logging in...\n")
-    BOT.allocateProduct()
+    time.sleep(1)
+    prodAvail = False
+    maxTries = 100
+    numTries = 1
+    while not prodAvail and numTries <= maxTries:
+        prodAvail = BOT.allocateProduct()
+        print(numTries)
+        numTries = numTries + 1
+    #BOT.allocateProduct()
     print("Bot is trying to add product to cart...\n")
     BOT.checkout()
     print("Bot is starting checkout process...\n")
