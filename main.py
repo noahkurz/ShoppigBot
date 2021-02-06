@@ -8,6 +8,7 @@ class supremeBot(object):
     def __init__(self, **info):
         self.base_url = 'https://www.bestbuy.com/site/sony-playstation-5-dualsense-wireless-controller/6430163.p?skuId=6430163'
         self.login_url = 'https://www.bestbuy.com/identity/global/signin'
+        self.checkout_url = 'https://www.bestbuy.com/checkout/r/fulfillment'
         #self.product = 'site/sony-playstation-5-console/6426149.p?skuId=6426149'
         #self.checkout = '/checkout'
         self.info = info
@@ -38,50 +39,39 @@ class supremeBot(object):
             "{}".format(
                 self.base_url))
         #//TO-DO find a more permanent solution to adding button to cart
-        self.b.find_by_xpath("/html/body/div[3]/main/div[2]/div[3]/div[2]/div/div/div[8][1]").click()
-        self.b.find_by_xpath("/html/body/div[3]/main/div[2]/div[3]/div[2]/div/div/div[8][1]").click()
-        self.b.find_by_xpath("/html/body/div[3]/main/div[2]/div[3]/div[2]/div/div/div[8][1]").click()
-    def checkoutFunc(self):
+        try:
+            self.b.find_by_xpath("/html/body/div[3]/main/div[2]/div[3]/div[2]/div/div/div[8][1]").click()
+            self.b.find_by_xpath("/html/body/div[3]/main/div[2]/div[3]/div[2]/div/div/div[8][1]").click()
+            self.b.find_by_xpath("/html/body/div[3]/main/div[2]/div[3]/div[2]/div/div/div[8][1]").click()
+            
+        except:
+            timeout = 45
+            self.b.visit(
+            "{}".format(
+                self.base_url))
+            
+            self.b.find_by_xpath("/html/body/div[3]/main/div[2]/div[3]/div[2]/div/div/div[8][1]").click()
+            self.b.find_by_xpath("/html/body/div[3]/main/div[2]/div[3]/div[2]/div/div/div[8][1]").click()
+            self.b.find_by_xpath("/html/body/div[3]/main/div[2]/div[3]/div[2]/div/div/div[8][1]").click()
+    def checkout(self):
 
-        self.b.visit("{}{}".format(self.base_url, self.checkout))
+        self.b.visit("{}".format(self.checkout_url))
+        self.b.visit("{}".format(self.checkout_url))
+        self.b.find_by_xpath("/html/body/div[1]/div[2]/div/div[2]/div[1]/div[1]/main/div[2]/div[2]/form/section/div/div[2]/div/div/button/span").click()
 
-        self.b.fill("order[billing_name]", self.info['namefield'])
-        self.b.fill("order[email]", self.info['emailfield'])
-        self.b.fill("order[tel]", self.info['phonefield'])
 
-        self.b.fill("order[billing_address]", self.info['addressfield'])
-        self.b.fill("order[billing_city]", self.info['city'])
-        self.b.fill("order[billing_zip]", self.info['zip'])
-        self.b.select("order[billing_country]", self.info['country'])
+    def submitPayment(self):
+        #self.b.find_by_xpath("//*[@id='credit-card-cvv']").fill("137")
+        self.b.find_by_xpath("//*[@id='credit-card-cvv']").fill("137")
+        
+        
 
-        self.b.select("credit_card[type]", self.info['card'])
-        self.b.fill("credit_card[cnb]", self.info['number'])
-        self.b.select("credit_card[month]", self.info['month'])
-        self.b.select("credit_card[year]", self.info['year'])
-        self.b.fill("credit_card[ovv]", self.info['ccv'])
-        self.b.find_by_css('.terms').click()
-        #self.b.find_by_value("process payment").click()
+        
 
 
 if __name__ == "__main__":
     INFO = {
-        "driver": "geckodriver",
-        "product": "Thermal Zip Up Hooded Sweatshirt",
-        "color": "Tangerine",
-        "size": "Medium",
-        "category": "sweatshirts",
-        "namefield": "example",
-        "emailfield": "example@example.com",
-        "phonefield": "XXXXXXXXXX",
-        "addressfield": "example road",
-        "city": "example",
-        "zip": "72046",
-        "country": "GB",
-        "card": "visa",
-        "number": "1234123412341234",
-        "month": "09",
-        "year": "2020",
-        "ccv": "123"
+        "driver": "geckodriver"
     }
     BOT = supremeBot(**INFO)
     # Flag to set to true if you want to reload the page continously close to drop.
@@ -97,6 +87,8 @@ if __name__ == "__main__":
     BOT.initializeBrowser()
 
     BOT.login()
-    timeout = 15
-    BOT.visitSite()
-    #BOT.checkoutFunc()
+    timeout = 45
+    #BOT.visitSite()
+    timeout = 45
+    BOT.checkout()
+    BOT.submitPayment()
