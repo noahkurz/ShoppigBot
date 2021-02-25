@@ -26,8 +26,8 @@ class shoppingBot(object):
                 self.login_url
             )
         )
-        self.b.find_by_xpath("//*[@id='fld-e']").fill("noahkurz19@gmail.com")#enter ypur emai;
-        self.b.find_by_xpath("//*[@id='fld-p1']").fill("Sabers7168!")#enter your best buy password associated with the email.
+        self.b.find_by_xpath("//*[@id='fld-e']").fill("")#enter ypur emai;
+        self.b.find_by_xpath("//*[@id='fld-p1']").fill("")#enter your best buy password associated with the email.
         self.b.find_by_xpath("/html/body/div[1]/div/section/main/div[1]/div/div/div/div/form/div[4]/button").click()
     
     def allocateProduct(self):
@@ -51,10 +51,10 @@ class shoppingBot(object):
 
     def submitPayment(self):
         try:
-            self.b.find_by_xpath("//*[@id='credit-card-cvv']").fill("137")#enter the CCV code associated with your best buy account
+            self.b.find_by_xpath("//*[@id='credit-card-cvv']").fill("")#enter the CCV code associated with your best buy account
         except:
             time.sleep(2)
-            self.b.find_by_xpath("//*[@id='credit-card-cvv']").fill("137")#enter the CCV code associated with your best buy account
+            self.b.find_by_xpath("//*[@id='credit-card-cvv']").fill("")#enter the CCV code associated with your best buy account
         print("we made it to the end!")
         #self.b.find_by_xpath("/html/body/div[1]/div[2]/div/div[2]/div[1]/div[1]/main/div[2]/div[3]/div/section/div[4]/button").click()
 
